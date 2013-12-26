@@ -2,14 +2,32 @@
 	$(window).ready(function(){
 		var currentMerchant ;
 		var currentAffiliate ;
-		$("#commission-form").hide();
-		$("#comtable").hide();
+		
+		if($("#fixedValue").val()==0) {
+			$("#commission-form").hide();
+			$("#comtable").hide();
+		}
+		else {
+			$("#transactionType").hide();
+			if($("#fixedType").val()=="merchant") {
+				var i = $("#fixedValue").val() ;
+				$("#Commission_merchant_id").val(i);
+				$("#Commission_merchant_id").attr('disabled','disabled');
+			} else {
+				var i = $("#fixedValue").val() ;
+				$("#Commission_affiliate_id").val(i);
+				$("#Commission_affiliate_id").attr('disabled','disabled');
+			}
+		}		
+		
 		
 		$("#merchantButton").click(function(){
 			currentMerchant = $("#merchantSelect").val();
 			$("#transactionType").hide("slow");
 			$("#Commission_merchant_id").val(currentMerchant);
 			$("#Commission_merchant_id").attr('disabled','disabled');
+			$("#fixedType").val("merchant");
+			$("#fixedValue").val(currentMerchant);
 			$("#commission-form").show("slow");
 			$("#comtable").show("slow");
 		});
@@ -19,6 +37,8 @@
 			$("#transactionType").hide("slow");
 			$("#Commission_affiliate_id").val(currentAffiliate);
 			$("#Commission_affiliate_id").attr('disabled','disabled');
+			$("#fixedType").val("affiliate");
+			$("#fixedValue").val(currentAffiliate);
 			$("#commission-form").show("slow");
 			$("#comtable").show("slow");
 		});
@@ -27,14 +47,12 @@
 			$("#Commission_merchant_id").removeAttr('disabled');
 			$("#Commission_affiliate_id").removeAttr('disabled');
 		});
-	});
-
-	
+	});	
 	
 </script>
 
-<div id="transactionType" class="col-md-8">
-	<div class="col-md-4">
+<div id="transactionType" class="col-md-8 col-md-offset-2">
+	<div class="col-md-6">
 		
 		<select id="merchantSelect" class="form-control">
 			<?php 
@@ -48,7 +66,7 @@
 		<input type="button" class="btn btn-default" value="Add by Merchant" id="merchantButton"> </input>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-6">
 		
 		<select id="affiliateSelect" class="form-control">
 			<?php 
@@ -134,6 +152,9 @@ $(function() {
 	<div class ="col-md-2">
 		<?php echo CHtml::submitButton('Save Transaction',array('class'=>'btn btn-default',)); ?>
 	</div>
+	
+	<input type="hidden" id="fixedType" name="fixedType" value="<?php if(isset($fixedType)) echo "$fixedType" ; ?>">
+	<input type="hidden" id="fixedValue" name="fixedValue" value="<?php if(isset($fixedValue)) echo "$fixedValue" ; ?>">
  <?php $this->endWidget(); ?>
 </div>
 <br><br>
