@@ -1,3 +1,69 @@
+<script>
+	$(window).ready(function(){
+		var currentMerchant ;
+		var currentAffiliate ;
+		$("#commission-form").hide();
+		$("#comtable").hide();
+		
+		$("#merchantButton").click(function(){
+			currentMerchant = $("#merchantSelect").val();
+			$("#transactionType").hide("slow");
+			$("#Commission_merchant_id").val(currentMerchant);
+			$("#Commission_merchant_id").attr('disabled','disabled');
+			$("#commission-form").show("slow");
+			$("#comtable").show("slow");
+		});
+		
+		$("#affiliateButton").click(function(){
+			currentAffiliate = $("#affiliateSelect").val();
+			$("#transactionType").hide("slow");
+			$("#Commission_affiliate_id").val(currentAffiliate);
+			$("#Commission_affiliate_id").attr('disabled','disabled');
+			$("#commission-form").show("slow");
+			$("#comtable").show("slow");
+		});
+		
+		$('#commission-form').submit(function(){
+			$("#Commission_merchant_id").removeAttr('disabled');
+			$("#Commission_affiliate_id").removeAttr('disabled');
+		});
+	});
+
+	
+	
+</script>
+
+<div id="transactionType" class="col-md-8">
+	<div class="col-md-4">
+		
+		<select id="merchantSelect" class="form-control">
+			<?php 
+			foreach($merchant as $i) {
+				echo "<option value=\"$i->id\">$i->merchant_name</option>";
+			}
+		?>
+		</select>
+		<br />
+		<div class="text-center">
+		<input type="button" class="btn btn-default" value="Add by Merchant" id="merchantButton"> </input>
+		</div>
+	</div>
+	<div class="col-md-4">
+		
+		<select id="affiliateSelect" class="form-control">
+			<?php 
+			foreach($affiliate as $i) {
+				echo "<option value=\"$i->id\">$i->affiliate_name</option>";
+			}
+		?>
+		</select>
+		<br />
+		<div class="text-center">
+		<input type="button" class="btn btn-default" value="Add by Affiliate" id="affiliateButton"> </input>
+		</div>
+	</div>
+</div>
+
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
@@ -73,7 +139,7 @@ $(function() {
 <br><br>
 
  <div class="col-md-8 col-md-offset-2 ">
- <table class="table table-striped">
+ <table id="comtable" class="table table-striped">
  
  <tr><th>Merchant Name</th><th>Affiliate Name</th><th>Date of Transaction</th><th>No of Clicks</th><th>No of Sales</th><th>Commission</th></tr>
 <?php 
