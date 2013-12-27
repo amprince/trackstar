@@ -9,7 +9,7 @@
 	<!-- blueprint CSS framework -->
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap-theme.css" />
-	<script src="https://code.jquery.com/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.validate.js"></script>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -46,6 +46,11 @@
           <li><a href="<?php  echo $this->createUrl('home/addUser'); ?>">Add User</a></li>
 		</ul>		
 	  </li>
+	  <li <?php if(Yii::app()->controller->action->id=="generateReports") echo 'class="active"'; ;?> ><a href="<?php  echo $this->createUrl('home/generateReports'); ?>">Reports</a></li>
+	  
+	  
+	  
+	  
       <li><a href="<?php echo $this->createUrl('home/logout'); ?>">Logout</a></li>      
     </ul>
 	

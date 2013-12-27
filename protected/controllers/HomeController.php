@@ -19,7 +19,7 @@ class HomeController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','AddUser','AddTransaction','AddMerchant','AddAffiliate','logout'),
+				'actions'=>array('index','AddUser','AddTransaction','AddMerchant','AddAffiliate','logout','generateReports','ajaxReports'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -214,6 +214,47 @@ class HomeController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
+	public function actionGenerateReports() {
+		$merchant = Merchant::model()->findAll();
+		$affiliate = Affiliate::model()->findAll();
+		$this->render('generateReports', array(
+			'merchant'=>$merchant,
+			'affiliate'=>$affiliate,
+		));
+	}
+	
+	public function actionAjaxReports() {
+		if(Yii::app()->request->getRequestType() == 'POST') {
+			if(Yii::app()->request->getPost("selectionType")=="merchant") {
+				$value = Yii::app()->request->getPost("selectionValue");
+				$commission = Commission::model()->findAllByAttributes(array('merchant_id'=>$value));
+				$this->renderPartial('ajax',array(
+					'commission'=>$commission,
+					'intervalType'=> Yii::app()->request->getPost("intervalType"),
+					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
+				));
+				
+			} else if (Yii::app()->request->getPost("selectionType")=="affiliate") { 
+				$value = Yii::app()->request->getPost("selectionValue");
+				$commission = Commission::model()->findAllByAttributes(array('affiliate_id'=>$value));
+				$this->renderPartial('ajax',array(
+					'commission'=>$commission,
+					'intervalType'=> Yii::app()->request->getPost("intervalType"),
+					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
+				));
+				
+			} else {
+				$commission = Commission::model()->findAll();
+				$this->renderPartial('ajax',array(
+					'commission'=>$commission,
+					'intervalType'=> Yii::app()->request->getPost("intervalType"),
+					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
+				));
+			}
+		}
+	}
+	
+	
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()
