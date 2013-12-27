@@ -158,7 +158,7 @@
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   </div>
-  <div class="panel-footer"><div class="text-right"><input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report"></div></div>
+  <div class="panel-footer"><div class="text-right"><div class="col-md-3 text-right"><select class="form-control " id="year"><option value="2014">2014</option></select></div><input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report"></div></div>
 </div>
 </form>
 </div>
