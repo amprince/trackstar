@@ -98,6 +98,8 @@ class HomeController extends Controller
 				'affiliate'=>$affiliate,
 				'message' => 'Transaction Saved',
 				'present'=>$present,
+				'fixedType'=>$_POST['fixedType'],
+				'fixedValue'=>$_POST['fixedValue'],
 			));
 			} else {
 				
@@ -106,6 +108,8 @@ class HomeController extends Controller
 				'merchant'=>$merchant,
 				'affiliate'=>$affiliate,
 				'present'=>$present,
+				'fixedType'=>$_POST['fixedType'],
+				'fixedValue'=>$_POST['fixedValue'],
 				));
 				
 			}
