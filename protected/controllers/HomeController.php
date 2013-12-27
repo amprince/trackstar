@@ -227,26 +227,44 @@ class HomeController extends Controller
 		if(Yii::app()->request->getRequestType() == 'POST') {
 			if(Yii::app()->request->getPost("selectionType")=="merchant") {
 				$value = Yii::app()->request->getPost("selectionValue");
-				$commission = Commission::model()->findAllByAttributes(array('merchant_id'=>$value));
+				//$commission = Commission::model()->findAllByAttributes(array('merchant_id'=>$value));
+				 $commission = new CActiveDataProvider('Commission', array(
+				 'criteria'=> array(
+						'condition'=>'merchant_id='.$value,
+                        'order'=>'date_of_report ASC',
+                    ),
+				 'pagination' => false,));
 				$this->renderPartial('ajax',array(
-					'commission'=>$commission,
+					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
 				));
 				
 			} else if (Yii::app()->request->getPost("selectionType")=="affiliate") { 
 				$value = Yii::app()->request->getPost("selectionValue");
-				$commission = Commission::model()->findAllByAttributes(array('affiliate_id'=>$value));
+				//$commission = Commission::model()->findAllByAttributes(array('affiliate_id'=>$value));
+				$commission = new CActiveDataProvider('Commission', array(
+				 'criteria'=> array(
+						'condition'=>'affiliate_id='.$value,
+                        'order'=>'date_of_report ASC',
+                    ),
+				 'pagination' => false,
+				 ));
 				$this->renderPartial('ajax',array(
-					'commission'=>$commission,
+					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
 				));
 				
 			} else {
-				$commission = Commission::model()->findAll();
+				//$commission = Commission::model()->findAll();
+				$commission = new CActiveDataProvider('Commission', array(
+				 'criteria'=> array(
+                        'order'=>'date_of_report ASC',
+                    ),
+				 'pagination' => false,));
 				$this->renderPartial('ajax',array(
-					'commission'=>$commission,
+					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
 				));

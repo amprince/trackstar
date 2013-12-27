@@ -82,10 +82,16 @@
 					$div.append("<table id=\"resultTable\" class=\"table table-striped\">");
 					$("#resultTable").append("<tr><th>Date Interval</th><th>Clicks</th><th>Sales</th><th>Commission</th></tr>");
 					var myArray = jQuery.parseJSON(data);
-					
+					var click = 0 ;
+					var sales = 0 ;
+					var comm = 0 ;
 					for(var i=0;i<myArray.length;i++){
                        $("#resultTable").append("<tr><td>"+myArray[i].date_of_report+"</td><td>" +myArray[i].no_of_clicks+"</td><td>" + myArray[i].no_of_sales+"</td><td>" + myArray[i].commission+"</td></tr>");
+					   click += parseInt(myArray[i].no_of_clicks) ;
+					   sales += parseInt(myArray[i].no_of_sales) ;
+					   comm += parseInt(myArray[i].commission) ;
                     }
+					$("#resultTable").children().last().append("<tr><th></th><th>" + click + "</th><th>" + sales + "</th><th>" + comm + "</th></tr>" ) ;
 					var myArray = jQuery.parseJSON(data);
 					//$div.append("</table>");
 

@@ -108,6 +108,11 @@ class Commission extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort' => array(
+              'defaultOrder' => array(
+                 'date_of_report' => CSort::SORT_DESC
+              ),
+			),
 		));
 	}
 

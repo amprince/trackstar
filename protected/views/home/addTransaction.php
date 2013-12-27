@@ -29,7 +29,7 @@
 			$("#fixedType").val("merchant");
 			$("#fixedValue").val(currentMerchant);
 			$("#commission-form").show("slow");
-			$("#comtable").show("slow");
+			$("#comtable").delay("500").show("slow");
 		});
 		
 		$("#affiliateButton").click(function(){
