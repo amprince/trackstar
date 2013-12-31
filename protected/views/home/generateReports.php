@@ -36,6 +36,7 @@
 			
 			if(intervalType=="specific")
 				intervalValue = $("#specficInterval").val();
+				<!--<?php echo '$("#specficInterval").val();' ?>-->
 			else
 				intervalValue = 0 ;
 			
@@ -118,7 +119,7 @@
 			}
 		?>
 		</select>
-<select id="startDisabled" class="form-control"></select>
+<select id="startDisabled" class="form-control"></select>   //redundant
 		</div>
 
 <div class="col-md-8 col-md-offset-2">
@@ -129,7 +130,7 @@
 	<div class="col-md-6">
     <div class="input-group">
 	  <span class="input-group-addon">
-        <input id="interval1" value="weekly" name="interval" type="radio" checked="checked"> Weekly
+        <input id="interval1" value="weekly" name="interval" type="radio" checked="checked"> Weekly  <!--for preselecting weekly-->
       </span>
 	  <span class="input-group-addon">
         <input id="interval2" value="monthly" name="interval" type="radio"> Monthly
@@ -154,11 +155,11 @@
       <span class="input-group-addon">
         <input id="selectionType3" value="affiliate" name="selectionType" type="radio"> Affiliate
       </span>
-	 <div id="replace"><select id="start" class="form-control"></select></div>
+	 <div id="replace"><select id="start" class="form-control"></select></div>   <!--Used to display the freezed zone besides Affiliates-->
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   </div>
-  <div class="panel-footer"><div class="text-right"><div class="col-md-3 text-right"><select class="form-control " id="year"><option value="2014">2014</option></select></div><input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report"></div></div>
+  <div class="panel-footer"><div class="text-right"><div class="col-md-3 text-right"><select class="form-control " id="year"><option value="2013">2013</option></select></div><input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report"></div></div>
 </div>
 </form>
 </div>
