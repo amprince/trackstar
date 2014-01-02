@@ -60,6 +60,7 @@ class User extends CActiveRecord
 			'affiliates' => array(self::HAS_MANY, 'Affiliate', 'user_id'),
 			'commissions' => array(self::HAS_MANY, 'Commission', 'user_id'),
 			'merchants' => array(self::HAS_MANY, 'Merchant', 'user_id'),
+                        'campaign' => array(self::HAS_MANY, 'Campaign', 'user_id'),
 		);
 	}
 

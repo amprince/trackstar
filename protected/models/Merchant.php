@@ -50,6 +50,7 @@ class Merchant extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'commissions' => array(self::HAS_MANY, 'Commission', 'merchant_id'),
+			'campaign' => array(self::HAS_MANY, 'Campaign', 'merchant_id'),
 			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}

@@ -4,9 +4,9 @@
     $time = strtotime("1 January $year", time());
     $day = date('w', $time);
     $time += ((7*$week)+1-$day)*24*3600;
-    $return[0] = date('Y-M-d', $time);
+    $return[0] = date("d-M-Y", $time);
     $time += 6*24*3600;
-    $return[1] = date('Y-M-d', $time);
+    $return[1] = date("d-M-Y", $time);
 	$temp = $week+1 ;
     return "Week $temp : " . $return[0] . " To " . $return[1];
 } ?>

@@ -1,26 +1,34 @@
 <?php
 
 /**
- * This is the model class for table "affiliate".
+ * This is the model class for table "campaign".
  *
- * The followings are the available columns in table 'affiliate':
+ * The followings are the available columns in table 'campaign':
  * @property integer $id
- * @property string $affiliate_name
+ * @property integer $merchant_id
+ * @property integer $affiliate_id
+ * @property string $campaign_date
+ * @property integer $estimated_value
+ * @property integer $final_value
+ * @property integer $added_by
+ * @property integer $finalized_by
  * @property string $added_on
- * @property integer $user_id
+ * @property string $finalized_on
  *
  * The followings are the available model relations:
- * @property User $user
- * @property Commission[] $commissions
+ * @property Affiliate $affiliate
+ * @property Merchant $merchant
+ * @property User $addedBy
+ * @property User $finalizedBy
  */
-class Affiliate extends CActiveRecord
+class Campaign extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'affiliate';
+		return 'campaign';
 	}
 
 	/**
@@ -31,13 +39,12 @@ class Affiliate extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('affiliate_name, user_id', 'required'),
-			array('id, user_id', 'numerical', 'integerOnly'=>true),
-			array('affiliate_name, added_on', 'length', 'max'=>45),
-			array('affiliate_name', 'unique', 'message' => 'This Affiliate already exists.'),
+			array('merchant_id, affiliate_id, campaign_date, estimated_value, added_by, added_on', 'required'),
+			array('merchant_id, affiliate_id, estimated_value, final_value, added_by, finalized_by', 'numerical', 'integerOnly'=>true),
+			array('finalized_on', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, affiliate_name, added_on, user_id', 'safe', 'on'=>'search'),
+			array('id, merchant_id, affiliate_id, campaign_date, estimated_value, final_value, added_by, finalized_by, added_on, finalized_on', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,9 +56,10 @@ class Affiliate extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
-			'commissions' => array(self::HAS_MANY, 'Commission', 'affiliate_id'),
-			'campaign' => array(self::HAS_MANY, 'Campaign', 'affiliate_id'),
+			'affiliate' => array(self::BELONGS_TO, 'Affiliate', 'affiliate_id'),
+			'merchant' => array(self::BELONGS_TO, 'Merchant', 'merchant_id'),
+			'addedBy' => array(self::BELONGS_TO, 'User', 'added_by'),
+			'finalizedBy' => array(self::BELONGS_TO, 'User', 'finalized_by'),
 		);
 	}
 
@@ -62,9 +70,15 @@ class Affiliate extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'affiliate_name' => 'Affiliate Name',
+			'merchant_id' => 'Merchant',
+			'affiliate_id' => 'Affiliate',
+			'campaign_date' => 'Campaign Date',
+			'estimated_value' => 'Estimated Value',
+			'final_value' => 'Final Value',
+			'added_by' => 'Added By',
+			'finalized_by' => 'Finalized By',
 			'added_on' => 'Added On',
-			'user_id' => 'User',
+			'finalized_on' => 'Finalized On',
 		);
 	}
 
@@ -87,9 +101,15 @@ class Affiliate extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('affiliate_name',$this->affiliate_name,true);
+		$criteria->compare('merchant_id',$this->merchant_id);
+		$criteria->compare('affiliate_id',$this->affiliate_id);
+		$criteria->compare('campaign_date',$this->campaign_date,true);
+		$criteria->compare('estimated_value',$this->estimated_value);
+		$criteria->compare('final_value',$this->final_value);
+		$criteria->compare('added_by',$this->added_by);
+		$criteria->compare('finalized_by',$this->finalized_by);
 		$criteria->compare('added_on',$this->added_on,true);
-		$criteria->compare('user_id',$this->user_id);
+		$criteria->compare('finalized_on',$this->finalized_on,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -100,7 +120,7 @@ class Affiliate extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Affiliate the static model class
+	 * @return Campaign the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
