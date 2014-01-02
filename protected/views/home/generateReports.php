@@ -1,3 +1,13 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+$(function() {
+	$( "#datepicker1" ).datepicker();
+	$( "#datepicker1" ).datepicker('setDate', new Date('01-01-2013'));
+    $( "#datepicker2" ).datepicker();
+    $( "#datepicker2" ).datepicker('setDate', new Date());
+  });
+  </script>
 <script>
 	$(window).ready(function(){ 
 	$("#specficInterval").attr('disabled','disabled');
@@ -57,6 +67,8 @@
 				selectionType: selectionType,
 				intervalValue: intervalValue,
 				selectionValue: selectionValue,
+				dateStart: $( "#datepicker1" ).val(),
+				dateEnd: $( "#datepicker2" ).val(),
 				
 			};
 			// $.getJSON( url, data, function( data ) {
@@ -78,23 +90,27 @@
 				success: function(data, textStatus, jqXHR) 
 				{
 					//alert("hello");
+					//$("#result").hide('slow');
 					var $div = $("#result") ;
+					
 					$div.html("");
+					
 					$div.append("<table id=\"resultTable\" class=\"table table-striped\">");
-					$("#resultTable").append("<tr><th>Date Interval</th><th>Clicks</th><th>Sales</th><th>Commission</th></tr>");
+					$("#resultTable").append("<tr><th>Sr</th><th>Date Interval</th><th>Clicks</th><th>Sales</th><th>Commission</th></tr>");
 					var myArray = jQuery.parseJSON(data);
 					var click = 0 ;
 					var sales = 0 ;
 					var comm = 0 ;
 					for(var i=0;i<myArray.length;i++){
-                       $("#resultTable").append("<tr><td>"+myArray[i].date_of_report+"</td><td>" +myArray[i].no_of_clicks+"</td><td>" + myArray[i].no_of_sales+"</td><td>" + myArray[i].commission+"</td></tr>");
+                       $("#resultTable").append("<tr><td>" + (i+1) + "</td><td>"+myArray[i].date_of_report+"</td><td>" +myArray[i].no_of_clicks+"</td><td>" + myArray[i].no_of_sales+"</td><td>" + myArray[i].commission+"</td></tr>");
 					   click += parseInt(myArray[i].no_of_clicks) ;
 					   sales += parseInt(myArray[i].no_of_sales) ;
 					   comm += parseInt(myArray[i].commission) ;
                     }
-					$("#resultTable").children().last().append("<tr><th></th><th>" + click + "</th><th>" + sales + "</th><th>" + comm + "</th></tr>" ) ;
-					var myArray = jQuery.parseJSON(data);
+					$("#resultTable").children().last().append("<tr><th></th><th></th><th>" + click + "</th><th>" + sales + "</th><th>" + comm + "</th></tr>" ) ;
+					//var myArray = jQuery.parseJSON(data);
 					//$div.append("</table>");
+					//$div.show('slow');
 
 				},
 				
@@ -159,7 +175,22 @@
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   </div>
-  <div class="panel-footer"><div class="text-right"><div class="col-md-3 text-right"><select class="form-control " id="year"><option value="2013">2013</option></select></div><input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report"></div></div>
+  <div class="panel-footer">
+	<div class="">
+		<div class="col-md-3">
+			<input type="text" class="form-control" id="datepicker1">
+		</div>
+		<div class="col-md-1">
+		<input class="btn btn-default" disabled="disabled" type="button" id="" value="To">
+		</div>
+		<div class="col-md-3">
+			<input type="text" class="form-control" id="datepicker2">
+		</div>
+		<div class="text-right">
+		<input class="btn btn-default" type="button" id="ajaxRequest" value="Get Report">
+		</div>
+	</div>
+</div>
 </div>
 </form>
 </div>

@@ -1,3 +1,18 @@
+<?php function getStartAndEndDate($week, $year)
+{
+
+    $time = strtotime("1 January $year", time());
+    $day = date('w', $time);
+    $time += ((7*$week)+1-$day)*24*3600;
+    $return[0] = date('Y-M-d', $time);
+    $time += 6*24*3600;
+    $return[1] = date('Y-M-d', $time);
+	$temp = $week+1 ;
+    return "Week $temp : " . $return[0] . " To " . $return[1];
+} ?>
+
+
+
 <?php
 
 	if($intervalType == "weekly") {
@@ -20,7 +35,7 @@
 				
 			} else {
 				$temp = array(
-					'date_of_report' => "Week $week",
+					'date_of_report' => getStartAndEndDate($week-1, 2013),
 					'no_of_clicks' => $item->no_of_clicks ,
 					'no_of_sales' => $item->no_of_sales,
 					'commission' => $item->commission,
@@ -69,52 +84,50 @@
 		echo json_encode($res);
 	} 
 	else if($intervalType == "specific"){
-	
+		
+		if($intervalValue < 1) $intervalValue = 1 ; ;
+		$start = strtotime($dateStart);
+		$end = strtotime($dateEnd);
+		$interval = $intervalValue * 24 * 3600 ;
+		$i = $start ;
+		$j = $start ;
+		$count = 0 ;
+		$size = sizeof($commission);
 		$arr = array();
-		$i=0;
-		$x=0;
-		$show = array();
-		//$date2=date_create("05.01.2013");
+		//echo $commission[$j]->date_of_report;
+		// while($i <= $end) {
+			// $i = $j + 1;
+			// echo Date("Y-m-d",$i) . "  ";
+			// $j = $j + $interval - 1;
+			// echo Date("Y-m-d",$j) . "\n";
+			// for($j=$count; $j<4; $j++) {
+				// echo $commission[$j]->date_of_report;
+			// }
+
+		// }
 		foreach($commission as $item) {
-			$actualgap = $intervalValue;
-			$ddate = $item->date_of_report ;
-			$duedt = explode("-", $ddate);
-			$date  = mktime(0, 0, 0, $duedt[1], $duedt[2], $duedt[0]);
-			$day = (int)date('mday', $date);
-			$gap  = date('d.m.Y', $date);
-			
-			//$tdate = date('d.m.Y', $date2);
-			//$diff=date_diff($gap,$date2);
-			
-			//$gap = $gap/$actualgap;
-			//for($i=0; $i<$actualgap; $i++){
-			if(isset($arr[$gap])) {
-				$temp = $arr[$gap] ;
-				
+			$temp = strtotime($item->date_of_report) ;
+			$difference = $temp - $start ;
+			$intgroup = floor($difference / $interval) + 1 ;
+			$st = Date("d-M-Y",($intgroup-1)*$interval + $start);
+			$et = Date("d-M-Y",($intgroup)*$interval + $start - 1);
+			if(isset($arr[$intgroup])) {
+				$temp = $arr[$intgroup] ;
 				$temp['no_of_clicks'] += $item->no_of_clicks;
-				
 				$temp['no_of_sales'] += $item->no_of_sales;
 				$temp['commission'] += $item->commission;
-				$arr[$gap] = $temp ;
-				if(($day % $intervalValue)==0)
-				{$x++;}
-				else
-				{$show[$x] += $temp;}
+				$arr[$intgroup] = $temp ;
 				
 			} else {
 				$temp = array(
-					'date_of_report' => "Interval $x $gap",
+					'date_of_report' => "$st To $et",
 					'no_of_clicks' => $item->no_of_clicks ,
 					'no_of_sales' => $item->no_of_sales,
 					'commission' => $item->commission,
 				) ;				
-				$arr[$gap] = $temp;
-				$show[$x] = $temp;
-				$i++;
+				$arr[$intgroup] = $temp ;
 			}
-			
 		}
-		
 		$res = array();
 		foreach($arr as $item) { 
 			array_push($res, $item);

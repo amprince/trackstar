@@ -75,10 +75,17 @@ class HomeController extends Controller
 		
 		$merchant = Merchant::model()->findAll();
 		$affiliate = Affiliate::model()->findAll();
-		$present=Commission::model()->with('merchant','affiliate')->findAll();
+		//$present=Commission::model()->with('merchant','affiliate')->findAll();
+		
+		$criteria = new CDbCriteria ;
+		//$criteria->condition = "affiliate_id = $value AND date_of_report >= '$dateStart' AND date_of_report <= '$dateEnd'  ";
+		$criteria->order = 'date_of_report DESC';
+		$criteria->with = array('merchant','affiliate',);
+		$criteria->limit = 10;
+		//var_dump($present);
+		$present=Commission::model()->with('merchant','affiliate')->findAll($criteria);
 		
 		//var_dump($present);
-		
 		if(isset($_POST["Commission"]))
 		{	
 			
@@ -225,49 +232,64 @@ class HomeController extends Controller
 	
 	public function actionAjaxReports() {
 		if(Yii::app()->request->getRequestType() == 'POST') {
+			$dateStart = date("Y-m-d", strtotime(Yii::app()->request->getPost("dateStart")));
+			$dateEnd = date("Y-m-d", strtotime(Yii::app()->request->getPost("dateEnd")));
+			
+			
 			if(Yii::app()->request->getPost("selectionType")=="merchant") {
 				$value = Yii::app()->request->getPost("selectionValue");
-				//$commission = Commission::model()->findAllByAttributes(array('merchant_id'=>$value));
+				$criteria=new CDbCriteria;
+				$criteria->condition = "merchant_id = $value AND date_of_report >= '$dateStart' AND date_of_report <= '$dateEnd'  ";
+				$criteria->order = 'date_of_report ASC';
+				//$criteria->addInCondition('merchant_id','='.$value,'AND');
+				//$criteria->addInCondition('date_of_report','>=' . $dateStart,'AND');
+				//$criteria->addInCondition('date_of_report','<=' . $dateEnd, 'AND');
+				
 				 $commission = new CActiveDataProvider('Commission', array(
-				 'criteria'=> array(
-						'condition'=>'merchant_id='.$value,
-                        'order'=>'date_of_report ASC',
-                    ),
+				 'criteria'=>  $criteria,
 				 'pagination' => false,));
+
 				$this->renderPartial('ajax',array(
 					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
+					'dateStart'=> $dateStart,
+					'dateEnd'=> $dateEnd,
+					
 				));
 				
 			} else if (Yii::app()->request->getPost("selectionType")=="affiliate") { 
 				$value = Yii::app()->request->getPost("selectionValue");
-				//$commission = Commission::model()->findAllByAttributes(array('affiliate_id'=>$value));
+				$criteria=new CDbCriteria;
+				$criteria->condition = "affiliate_id = $value AND date_of_report >= '$dateStart' AND date_of_report <= '$dateEnd'  ";
+				$criteria->order = 'date_of_report ASC';
 				$commission = new CActiveDataProvider('Commission', array(
-				 'criteria'=> array(
-						'condition'=>'affiliate_id='.$value,
-                        'order'=>'date_of_report ASC',
-                    ),
+				 'criteria'=> $criteria,
 				 'pagination' => false,
 				 ));
 				$this->renderPartial('ajax',array(
 					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
+					'dateStart'=> $dateStart,
+					'dateEnd'=> $dateEnd,
 				));
 				
 			} else {
 				//$commission = Commission::model()->findAll();
+				$criteria=new CDbCriteria;
+				$criteria->condition = "date_of_report >= '$dateStart' AND date_of_report <= '$dateEnd'  ";
+				$criteria->order = 'date_of_report ASC';
 				$commission = new CActiveDataProvider('Commission', array(
-				 'criteria'=> array(
-                        'order'=>'date_of_report ASC',
-                    ),
+				 'criteria'=> $criteria,
 				 'pagination' => false,));
 				$this->renderPartial('ajax',array(
 					'commission'=>$commission->getData() ,
 					'intervalType'=> Yii::app()->request->getPost("intervalType"),
 					'intervalValue'=> Yii::app()->request->getPost("intervalValue"),
-				));
+					'dateStart'=> $dateStart,
+					'dateEnd'=> $dateEnd,)
+				);
 			}
 		}
 	}
