@@ -136,6 +136,8 @@ class HomeController extends Controller
 		
 	}
 	
+	
+	
 	public function actionAddMerchant()
 	{
 		$model = new Merchant();

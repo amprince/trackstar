@@ -2,9 +2,9 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 $(function() {
-	$( "#datepicker1" ).datepicker();
+	$( "#datepicker1" ).datepicker({maxDate: "0D"});
 	$( "#datepicker1" ).datepicker('setDate', new Date('01-01-2013'));
-    $( "#datepicker2" ).datepicker();
+    $( "#datepicker2" ).datepicker({maxDate: "0D"});
     $( "#datepicker2" ).datepicker('setDate', new Date());
   });
   </script>
